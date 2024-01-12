@@ -46,8 +46,9 @@ function timeToAngle(time) {
 
 let tasks = [
     { start: '07:00', end: '07:30', description: 'Breakfast', color: '#FFD700' },
-    { start: '08:00', end: '08:45', description: 'Study', color: '#FF4500' },
-    // ... other tasks
+    { start: '07:30', end: '08:00', description: 'Brush Teeth', color: '#FF4500' },
+    { start: '08:00', end: '08:25', description: 'Play', color: '#AB1234' },
+    { start: '08:25', end: '08:40', description: 'Get Ready', color: '#BC5678' },
 ];
 
 
@@ -61,7 +62,7 @@ function updateClockHands() {
     const minutes = now.getMinutes();
     const hours = now.getHours();
 
-    const secondDegrees = (seconds / 60) * 360; // Add 90 to offset the initial 90 degrees
+    const secondDegrees = (seconds / 60) * 360;
     const minuteDegrees = (minutes / 60) * 360 + (seconds/60) * 6;
     const hourDegrees = ((hours % 12) / 12 ) * 360 + (minutes/60) * 30;
 
@@ -90,6 +91,34 @@ function positionNumbers() {
         number.style.transform = `translate(-50%, -50%) rotate(${angle}deg) rotate(${-angle}deg)`;
     });
 }
+
+function populateTaskTable(tasks) {
+    const tableBody = document.getElementById('taskTableBody');
+    tableBody.innerHTML = ''; // Clear existing content
+
+    tasks.forEach(task => {
+        const row = document.createElement('tr');
+        
+        // Task Name
+        const nameCell = document.createElement('td');
+        nameCell.textContent = task.description;
+        row.appendChild(nameCell);
+
+        // Task Duration
+        const durationCell = document.createElement('td');
+        durationCell.textContent = `${task.start} - ${task.end}`;
+        row.appendChild(durationCell);
+
+        // Task Colour
+        const colourCell = document.createElement('td');
+        colourCell.style.backgroundColor = task.color;
+        row.appendChild(colourCell);
+
+        tableBody.appendChild(row);
+    });
+}
+
+populateTaskTable(tasks);
 
 // Initial positioning
 positionNumbers();
