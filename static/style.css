@@ -30,7 +30,7 @@ body {
 
 .hand {
     position: absolute;
-    bottom: 50%; /* Pivot point at the center of the clock */
+    bottom: 50%;
     left: 50%;
     transform-origin: 50% 100%;
     background-color: black;
@@ -38,58 +38,74 @@ body {
 
 .number {
     position: absolute;
-    font-size: 2vw; /* Responsive font size */
-    width: 30px; /* Fixed width for consistency */
-    height: 30px; /* Fixed height for consistency */
+    font-size: 2vw;
+    width: 30px;
+    height: 30px;
     text-align: center;
-    line-height: 30px; /* For vertical alignment */
+    line-height: 30px;
     transform-origin: center;
     z-index: 10;
 }
 
 
 #hour-hand {
-    width: 1vw; /* Responsive width */
-    height: 6vw; /* Responsive height, adjust based on clock size */
-    bottom: 50%; /* Centering the hand */
+    width: 0.8vw;
+    height: 12vw;
+    bottom: 50%;
     left: calc(50% - 0.5vw); /* Centering based on width */
     background-color: black;
     transform-origin: 50% 100%;
+    z-index: 9;
+
 }
 
 #minute-hand {
-    width: 0.8vw; /* Slightly thinner than the hour hand */
-    height: 12vw; /* Longer than the hour hand */
+    width: 0.6vw;
+    height: 18vw;
     bottom: 50%;
     left: calc(50% - 0.4vw); /* Centering based on width */
     background-color: black;
     transform-origin: 50% 100%;
+    z-index: 9;
+
 }
 
 #second-hand {
-    width: 0.6vw; /* The thinnest of all hands */
-    height: 14vw; /* The longest to reach near the border */
+    width: 0.2vw;
+    height: 20vw;
     bottom: 50%;
     left: calc(50% - 0.3vw); /* Centering based on width */
-    background-color: red; /* Often colored differently for visibility */
+    background-color: red;
     transform-origin: 50% 100%;
 }
-
 
 .task-bit {
     position: absolute;
     border: 2px solid red;
     background-color: red;
-    /* Additional styling will be added later for positioning */
 }
 
-.task-text {
-    color: white; /* Choose a color that stands out against your task colors */
-    font-size: 1vw; /* Adjust size as needed for visibility */
-    text-align: center;
-    position: absolute;
-    width: 100%; /* Ensure it spans the width of the task bit */
-    top: 50%; /* Center vertically */
-    transform: translateY(-50%); /* Align text center within the task bit */
-    pointer-events: none; /* Prevents text from blocking click events on the task bit */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-table {
+    margin-left: 20px; /* Space between clock and table */
+}
+
+.task-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.task-table th, .task-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.task-table th {
+    background-color: #f2f2f2;
 }
