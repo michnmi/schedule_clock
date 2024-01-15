@@ -144,9 +144,6 @@ function addTask() {
     const end = document.getElementById('task-end').value;
     const color = document.getElementById('task-color').value;
 
-    // Validate input (e.g., check time format, ensure non-empty values)
-    // ...
-
     // Create a new task object
     const newTask = {
         description: description,
