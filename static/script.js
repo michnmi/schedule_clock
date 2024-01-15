@@ -16,24 +16,24 @@ function addTaskToClock(task) {
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
     return {
-      x: centerX + (radius * Math.cos(angleInRadians)),
-      y: centerY + (radius * Math.sin(angleInRadians))
+        x: centerX + (radius * Math.cos(angleInRadians)),
+        y: centerY + (radius * Math.sin(angleInRadians))
     };
-  }
-  
-function describeArc(x, y, radius, startAngle, endAngle){
-      var start = polarToCartesian(x, y, radius, endAngle);
-      var end = polarToCartesian(x, y, radius, startAngle);
-      var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-      var d = [
-          "M", start.x, start.y, 
-          "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
-          "L", x, y,
-          "Z"
-      ].join(" ");
-      return d;       
-  }
-  
+}
+
+function describeArc(x, y, radius, startAngle, endAngle) {
+    var start = polarToCartesian(x, y, radius, endAngle);
+    var end = polarToCartesian(x, y, radius, startAngle);
+    var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+    var d = [
+        "M", start.x, start.y,
+        "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
+        "L", x, y,
+        "Z"
+    ].join(" ");
+    return d;
+}
+
 
 function timeToAngle(time) {
     let [hours, minutes] = time.split(':').map(n => parseInt(n, 10));
@@ -63,8 +63,8 @@ function updateClockHands() {
     const hours = now.getHours();
 
     const secondDegrees = (seconds / 60) * 360;
-    const minuteDegrees = (minutes / 60) * 360 + (seconds/60) * 6;
-    const hourDegrees = ((hours % 12) / 12 ) * 360 + (minutes/60) * 30;
+    const minuteDegrees = (minutes / 60) * 360 + (seconds / 60) * 6;
+    const hourDegrees = ((hours % 12) / 12) * 360 + (minutes / 60) * 30;
 
     document.getElementById('second-hand').style.transform = `rotate(${secondDegrees}deg)`;
     document.getElementById('minute-hand').style.transform = `rotate(${minuteDegrees}deg)`;
@@ -98,7 +98,7 @@ function populateTaskTable(tasks) {
 
     tasks.forEach(task => {
         const row = document.createElement('tr');
-        
+
         // Task Name
         const nameCell = document.createElement('td');
         nameCell.textContent = task.description;
@@ -117,6 +117,58 @@ function populateTaskTable(tasks) {
         tableBody.appendChild(row);
     });
 }
+
+const clearTasksButton = document.getElementById('clear-tasks-button');
+clearTasksButton.addEventListener('click', clearAllTasks);
+
+function clearAllTasks() {
+    // Empty the tasks array
+    tasks = [];
+
+    // Remove task segments from the SVG clock
+    const clockTasks = document.getElementById('clock-tasks');
+    clockTasks.innerHTML = ''; // Clear SVG content
+
+    // Repopulate the task table with the now-empty array
+    populateTaskTable(tasks);
+}
+
+
+const addTaskButton = document.getElementById('add-task-button');
+addTaskButton.addEventListener('click', addTask);
+
+
+function addTask() {
+    const description = document.getElementById('task-description').value;
+    const start = document.getElementById('task-start').value;
+    const end = document.getElementById('task-end').value;
+    const color = document.getElementById('task-color').value;
+
+    // Validate input (e.g., check time format, ensure non-empty values)
+    // ...
+
+    // Create a new task object
+    const newTask = {
+        description: description,
+        start: start,
+        end: end,
+        color: color
+    };
+
+    // Add the task to the tasks array
+    tasks.push(newTask);
+
+    // Add the task to the SVG clock
+    addTaskToClock(newTask);
+
+    // Repopulate the task table
+    populateTaskTable(tasks);
+
+    // Clear input fields
+    document.getElementById('add-task-form').reset();
+}
+
+
 
 populateTaskTable(tasks);
 

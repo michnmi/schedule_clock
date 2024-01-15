@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Task Clock</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
     <div class="container">
         <div id="clock">
@@ -39,8 +41,21 @@
                     <!-- Task rows will be inserted here -->
                 </tbody>
             </table>
-        </div>       
+        </div>
+        <div id="add-task-form">
+            <label for="task-description">Task Description:</label><br>
+            <input type="text" id="task-description"><br>
+            <label for="task-start">Start Time (HH:MM):</label><br>
+            <input type="time" id="task-start"><br>
+            <label for="task-end">End Time (HH:MM):</label><br>
+            <input type="time" id="task-end"><br>
+            <label for="task-color">Task Color:</label><br>
+            <input type="color" id="task-color"><br><br>
+            <button id="add-task-button">Add Task</button>
+        </div>
     </div>
+    <button id="clear-tasks-button">Clear All Tasks</button>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
 </html>
