@@ -34,7 +34,7 @@ $ git clone git@github.com:michnmi/schedule_clock.git
 2. Navigate to the project directory:
 
 ```bash
-$ cd responsive-clock
+$ cd schedule_clock
 ```
 
 3.  Setup python envs for development
