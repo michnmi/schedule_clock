@@ -1,9 +1,15 @@
 function addTaskToClock(task) {
+    if (!isTaskCurrent(task)) {
+        return; // Skip tasks that are not within the current time range
+    }
+
     let svgNS = "http://www.w3.org/2000/svg";
     let taskPath = document.createElementNS(svgNS, "path");
 
     let startAngle = timeToAngle(task.start);
     let endAngle = timeToAngle(task.end);
+
+    console.log(`Task: ${task.description} | Start Angle: ${startAngle} | End Angle: ${endAngle}`);
 
     // Calculate the SVG path data for the task segment
     let pathData = describeArc(50, 50, 50, startAngle, endAngle);
@@ -12,6 +18,7 @@ function addTaskToClock(task) {
 
     document.getElementById("clock-tasks").appendChild(taskPath);
 }
+
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
@@ -35,20 +42,57 @@ function describeArc(x, y, radius, startAngle, endAngle){
   }
   
 
-function timeToAngle(time) {
+  function timeToAngle(time) {
     let [hours, minutes] = time.split(':').map(n => parseInt(n, 10));
+
+    // Convert 24-hour time to 12-hour time if needed
+    if (hours >= 12) {
+        hours = hours - 12;
+    }
+
     let hourAngle = (hours % 12) * 30; // 30 degrees per hour
-    let minuteAngle = minutes * 0.5; // 0.5 degrees per minute
-    return hourAngle + minuteAngle; // Total angle
+    let minuteAngle = minutes * 6; // 6 degrees per minute
+    let totalAngle = hourAngle + (minutes / 60) * 30;
+
+    console.log(`Time: ${time}, Angle: ${totalAngle}`);
+    return totalAngle;
+}
+
+
+function isTaskCurrent(task) {
+    const now = new Date();
+    const [startHours, startMinutes] = task.start.split(':').map(Number);
+    const [endHours, endMinutes] = task.end.split(':').map(Number);
+
+    const taskStart = new Date(now);
+    taskStart.setHours(startHours, startMinutes, 0, 0);
+
+    const taskEnd = new Date(now);
+    taskEnd.setHours(endHours, endMinutes, 0, 0);
+
+    // Only return false if the task is completely in the past.
+    return now <= taskEnd;
 }
 
 
 
+
+function updateClockTasks() {
+    const clockTasks = document.getElementById("clock-tasks");
+    clockTasks.innerHTML = ''; // Clear existing tasks
+    console.log('Updating clock tasks...');
+    tasks.forEach(task => {
+        console.log(`Checking task: ${task.description}`);
+        addTaskToClock(task); // Add only current tasks
+    });
+}
+
+
 let tasks = [
     { start: '07:00', end: '07:30', description: 'Breakfast', color: '#FFD700' },
-    { start: '07:30', end: '08:00', description: 'Brush Teeth', color: '#FF4500' },
-    { start: '08:00', end: '08:25', description: 'Play', color: '#AB1234' },
-    { start: '08:25', end: '08:40', description: 'Get Ready', color: '#BC5678' },
+    { start: '10:10', end: '10:30', description: 'Brush Teeth', color: '#FF4500' },
+    { start: '11:00', end: '11:25', description: 'Play', color: '#AB1234' },
+    { start: '13:25', end: '14:40', description: 'Get Ready', color: '#BC5678' },
 ];
 
 
@@ -132,5 +176,9 @@ setInterval(updateClockHands, 1000);
 
 // Initial update
 updateClockHands();
+
+setInterval(updateClockTasks, 60000);
+updateClockTasks(); // Initial call
+
 
 console.log("Added tasks to clock");
